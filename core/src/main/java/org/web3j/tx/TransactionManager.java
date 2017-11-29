@@ -3,6 +3,8 @@ package org.web3j.tx;
 import java.io.IOException;
 import java.math.BigInteger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
@@ -16,8 +18,10 @@ import org.web3j.tx.response.TransactionReceiptProcessor;
  */
 public abstract class TransactionManager {
 
+	private static final Logger log = LoggerFactory.getLogger(TransactionManager.class);
+
     public static final int DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH = 40;
-    public static final long DEFAULT_POLLING_FREQUENCY = 1000 * 15;
+    public static final long DEFAULT_POLLING_FREQUENCY = 100;
 
     private final TransactionReceiptProcessor transactionReceiptProcessor;
 
@@ -26,6 +30,7 @@ public abstract class TransactionManager {
     }
 
     protected TransactionManager(Web3j web3j) {
+    	log.info("DEFAULT_POLLING_FREQUENCY:" + DEFAULT_POLLING_FREQUENCY);
         this.transactionReceiptProcessor = new PollingTransactionReceiptProcessor(
                 web3j, DEFAULT_POLLING_FREQUENCY, DEFAULT_POLLING_ATTEMPTS_PER_TX_HASH);
     }
